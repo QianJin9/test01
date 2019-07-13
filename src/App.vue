@@ -1,9 +1,12 @@
 <template>
   <div class="d-app-wrap">
-    <mt-header fixed title=""></mt-header>
+    <mt-header fixed title="Vue项目"></mt-header>
 
-    <router-view></router-view>
+    <transition>
+      <router-view></router-view>
+    </transition>
 
+    <!-- 底部区域 -->
     <nav class="mui-bar mui-bar-tab">
       <router-link class="mui-tab-item" to="/home">
         <span class="mui-icon mui-icon-home"></span>
@@ -27,16 +30,13 @@
         <span class="mui-tab-label">搜索</span>
       </router-link>
     </nav>
-
   </div>
 </template>
 
 <script>
 export default {
   data() {
-    return {
-      
-    };
+    return {};
   }
 };
 </script>
