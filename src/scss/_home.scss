@@ -1,0 +1,9 @@
+// .mui-media-body.l-my-test-color {
+//   color: red;
+// }  这么写的不会生效，mui原来提供的类的权限太高，所以要写成下面的形式
+
+.mui-table-view.mui-grid-view .mui-table-view-cell {
+  .mui-media-body.l-my-test-color {
+    color: red;
+  }
+}

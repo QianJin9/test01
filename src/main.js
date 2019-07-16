@@ -1,13 +1,16 @@
 import Vue from 'vue'
-
-
+// 1.1 路由的包
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
 
 // 2.1 我们不使用这个vue-resource的包，我们选择axios
 import axios from 'axios';
-axios.defaults.baseURL = 'http://www.liulongbin.top:3005';
+axios.defaults.baseURL = 'http://www.liulongbin.top:3005/';
 // 这是修改Vue的原型，可以让我们使用axios和vue-resource类似，直接使用 this.$http.xxx 就可以使用了
-Vue.prototype.$http = axios;
+Vue.prototype.$http= axios;
 
+// this.$http.get('xxx')
+// axios.get('xxx').then ===  this.$http.get()
 
 // 拦截器配置，  这是请求拦截器，所有请求发送出去之前都要走这里
 axios.interceptors.request.use(function (config) {
@@ -22,30 +25,59 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
   console.log('所有成功响应 先走拦截器里--2：', response)
   return response.data;
+  // return response;
 }, function (error) {
   console.log('所有失败响应 先走拦截器里--2：', error)
   return Promise.reject(error);
 });
 
-// 引入Mint-ui
+// 导入格式化时间的插件
+import moment from 'moment'
+// 定义全局的过滤器
+Vue.filter('dateFormat', function (dataStr, pattern) {
+  if(!pattern){
+    pattern = "YYYY-MM-DD HH:mm:ss"
+  }
+  return moment(dataStr).format(pattern)
+})
+
+// 使用模块化的方式，循环注册全局过滤器
+import filters from './filters/index.js';
+Object.keys(filters).forEach(k => Vue.filter(k, filters[k]));
+
+
+
+// 导入 MUI 的样式
+import './lib/mui/css/mui.min.css'
+// 导入扩展图标样式
+import './lib/mui/css/icons-extra.css'
+
+import './scss/index.scss';
+
+
+// 安装 图片预览插件
+import VuePreview from 'vue-preview'
+Vue.use(VuePreview)
+
+
+// 按需导入 Mint-UI 中的组件， 工作里面都是按需导入，就是说我们需要什么组件我们就导入什么组件，并不用把所有的文件都导入进来
+/* import { Header, Swipe, SwipeItem, Button, Lazyload } from 'mint-ui'
+Vue.component(Header.name, Header)
+Vue.component(Swipe.name, Swipe)
+Vue.component(SwipeItem.name, SwipeItem)
+Vue.component(Button.name, Button)
+Vue.use(Lazyload); */
 import MintUI from 'mint-ui'
+Vue.use(MintUI)
 import 'mint-ui/lib/style.css'
 
-Vue.use(MintUI)
+// 1.3 导入自己的 router.js 路由模块
+import router from './router.js'
 
-// 引入Mui (第三方的库放一起)
-import './assets/mui/css/mui.min.css'
-import './assets/mui/css/icons-extra.css'
-
-import './scss/app.scss'
-
-import router from './router/index.js';
-
-
-import App from './App.vue'
-// 需要加载根组件到id等于app的div上面,用render的方法
+// 导入 App 根组件
+import app from './App.vue'
 var vm = new Vue({
   el: '#app',
-  render: c => c(App),
-  router
+  render: c => c(app),
+  router,
 })
